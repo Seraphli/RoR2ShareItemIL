@@ -1,0 +1,8 @@
+# build output
+bin/
+obj/
+out/
+.build/
+
+# local backups
+*.bak
