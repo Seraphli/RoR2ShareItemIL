@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>ShareItemPatch</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!-- Directory that contains RoR2.dll (Risk of Rain 2_Data/Managed).
+         Passed by build.sh as: dotnet build -p:GameDir=/path/to/Managed -->
+    <GameDir Condition="'$(GameDir)' == ''">$(GAME_DIR)</GameDir>
+  </PropertyGroup>
+
+  <Target Name="EnsureGameDir" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="'$(GameDir)' == ''"
+           Text="GameDir is not set. Pass -p:GameDir=&lt;path to Risk of Rain 2_Data/Managed&gt; or set the GAME_DIR environment variable." />
+    <Error Condition="!Exists('$(GameDir)/RoR2.dll')"
+           Text="RoR2.dll not found under '$(GameDir)'." />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="RoR2">
+      <HintPath>$(GameDir)/RoR2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GameDir)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
+      <HintPath>$(GameDir)/com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
